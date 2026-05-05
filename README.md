@@ -5,7 +5,7 @@
 <p align="left">
   <img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white"/>
   <img src="https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat&logo=fastapi&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Gemini-3.0-Flash-preview-4285F4?style=flat&logo=google&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Gemini-3.0_Flash_Preview-4285F4?style=flat&logo=google&logoColor=white"/>
   <img src="https://img.shields.io/badge/MCP-Tool_Calling-FF6B35?style=flat"/>
   <img src="https://img.shields.io/badge/uv-Package_Manager-DE5FE9?style=flat"/>
   <img src="https://img.shields.io/badge/Tests-29_passing-2ECC71?style=flat&logo=pytest&logoColor=white"/>
