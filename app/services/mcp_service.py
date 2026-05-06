@@ -9,6 +9,7 @@ from app.core.exceptions import AIProviderError
 from app.schemas.mcp import MCPChatRequest, MCPChatResponse
 from app.services.task_service import TaskService
 from app.services.note_service import NoteService
+from app.services import session_store
 
 
 class MCPService:
@@ -289,14 +290,26 @@ class MCPService:
     # ── Internal chat logic (separated so chat() stays clean) ─────────────────
 
     def _chat(self, request: MCPChatRequest) -> MCPChatResponse:
-        history = [
-            types.Content(
-                role=msg.role,
-                parts=[types.Part(text=msg.content)],
-            )
-            for msg in request.history
-        ]
+        session_id = request.session_id
+        if request.history:
 
+            history = [
+                types.Content(
+                    role=msg.role,
+                    parts=[types.Part(text=msg.content)],
+                )
+                for msg in request.history
+            ]
+        else:
+
+            stored = session_store.get_history(session_id)
+            history = [
+                types.Content(
+                    role=msg.role,
+                    parts=[types.Part(text=msg.content)],
+                )
+                for msg in stored
+            ]
         system_instruction = """
         You are a helpful personal assistant managing the user's tasks and notes.
         Use the provided tools to create, update, list, or delete tasks and notes.
