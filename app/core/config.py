@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     APP_NAME : str = "Smart Task Manager"
     APP_VERSION : str = "0.1.0"
     DATA_FILE_PATH : str = "data/db.json"
+
+    DATABASE_URL: str = "postgresql://postgres:admin@localhost:5432/smarttaskdb"
+    
     CORS_ORIGINS : list[str] = ["*"]
     GEMINI_API_KEY : str = ""
     OPENAI_API_KEY : str = ""
