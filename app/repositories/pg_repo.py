@@ -12,29 +12,30 @@ def _now() -> datetime:
 
 class PgTaskRepository(BaseRepository[dict]):
     
-    def __init__(self, db :Session):
+    def __init__(self, db :Session, user_id: str) -> None:
         self._db = db
+        self._user_id = user_id
     
 
     def get_all(self) -> list[dict]:
-        rows = self._db.query(TaskModel).order_by(TaskModel.created_at.desc()).all()
+        rows = self._db.query(TaskModel).filter(TaskModel.user_id == self._user_id).order_by(TaskModel.created_at.desc()).all()
 
         return [r.to_dict() for r in rows]
 
     def get_by_id(self, id: str) -> Optional[dict]:
-        row = self._db.query(TaskModel).filter(TaskModel.id == id).first()
+        row = self._db.query(TaskModel).filter(TaskModel.id == id, TaskModel.user_id == self._user_id).first()
         return row.to_dict() if row else None
 
     def create(self, data: dict) -> dict:
         now = _now()
-        task = TaskModel(id = generate_id(), created_at= now, updated_at= now, **data)
+        task = TaskModel(id = generate_id(),user_id = self._user_id, created_at= now, updated_at= now, **data)
         self._db.add(task)
         self._db.commit()
         self._db.refresh(task)
         return task.to_dict()
     
     def update(self, id: str, data: dict) -> dict:
-        task = self._db.query(TaskModel).filter(TaskModel.id == id).first()
+        task = self._db.query(TaskModel).filter(TaskModel.id == id, TaskModel.user_id == self._user_id).first()
         if not task: return None
         for k,v in data.items() :
             setattr(task, k ,v)
@@ -44,7 +45,7 @@ class PgTaskRepository(BaseRepository[dict]):
         return task.to_dict()
     
     def delete(self, id: str) -> bool:
-        task = self._db.query(TaskModel).filter(TaskModel.id == id).first()
+        task = self._db.query(TaskModel).filter(TaskModel.id == id, TaskModel.user_id == self._user_id).first()
         if not task: return False
         self._db.delete(task)
         self._db.commit()
@@ -53,22 +54,23 @@ class PgTaskRepository(BaseRepository[dict]):
 
 class pgNoteRepository(BaseRepository[dict]):
 
-    def __init__(self,db :Session):
+    def __init__(self,db :Session, user_id: str):
         self._db = db
+        self._user_id = user_id
     
     def get_all(self, id: str) -> list[dict]:
-        rows = self._db.query(NoteModel).order_by(NoteModel.created_at.desc()).all()
+        rows = self._db.query(NoteModel).filter(NoteModel.user_id == self._user_id).order_by(NoteModel.created_at.desc()).all()
 
         return [r.to_dict() for r in rows]
 
     def get_by_id(self, id: str) -> Optional[dict]:
-        row = self._db.query(NoteModel).filter(NoteModel.id == id).first()
+        row = self._db.query(NoteModel).filter(NoteModel.id == id, NoteModel.user_id == self._user_id).first()
 
         return row.to_dict() if row else None
     
     def create(self, data: dict) -> dict:
         now = _now()
-        note = NoteModel(id = generate_id(), created_at = now, updated_at = now, **data)
+        note = NoteModel(id = generate_id(),user_id = self._user_id ,created_at = now, updated_at = now, **data)
 
         self._db.add(note)
         self._db.commit()
@@ -77,7 +79,7 @@ class pgNoteRepository(BaseRepository[dict]):
     
     def update(self, id :str, data : dict) -> Optional[dict]:
 
-        note = self._db.query(NoteModel).filter(NoteModel.id == id).first()
+        note = self._db.query(NoteModel).filter(NoteModel.id == id, NoteModel.user_id == self._user_id).first()
         if not note: return None
         for k,v in data.items:
             setattr(note, k , v)
@@ -89,7 +91,7 @@ class pgNoteRepository(BaseRepository[dict]):
         return note.to_dict()
     
     def delete(self, id: str) -> bool:
-        note = self._db.query(NoteModel).filter(NoteModel.id == id).first()
+        note = self._db.query(NoteModel).filter(NoteModel.id == id, NoteModel.user_id == self._user_id).first()
         if not note: return False
         
         self._db.delete(None)

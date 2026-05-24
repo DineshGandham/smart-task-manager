@@ -1,6 +1,9 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session
+
 from app.core.database import get_db
+from app.core.security import get_current_user
+from app.models.users import UserModel
 from app.core.config import Settings, get_settings
 from app.repositories.json_repo import TaskRepository, NoteRepository
 from app.repositories.pg_repo import PgTaskRepository, pgNoteRepository
@@ -22,16 +25,16 @@ from app.services.mcp_service import MCPService
 # def get_note_service(repo = Depends(get_note_repo)) -> NoteService:
 #     return NoteService(repo=repo)
 
-def get_task_repo(db : Session = Depends(get_db)) -> PgTaskRepository:
+def get_task_repo(db : Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)) -> PgTaskRepository:
 
-    return PgTaskRepository(db = db)
+    return PgTaskRepository(db = db, user_id= current_user.id)
 
 def get_task_service(repo = Depends(get_task_repo)) -> TaskService: 
     return TaskService(repo= repo)
 
-def get_note_repo(db: Session = Depends(get_db)) -> pgNoteRepository:
+def get_note_repo(db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)) -> pgNoteRepository:
 
-    return pgNoteRepository(db= db)
+    return pgNoteRepository(db= db, user_id= current_user.id)
 
 def get_note_service(repo = Depends(get_note_repo)) -> NoteService:
 

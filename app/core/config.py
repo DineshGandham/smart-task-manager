@@ -29,6 +29,9 @@ class Settings(BaseSettings):
     CORS_ORIGINS : list[str] = ["*"]
     GEMINI_API_KEY : str = ""
     OPENAI_API_KEY : str = ""
+    ACCESS_TOKEN_EXPIRE_HOURS : int = 24
+    SECRETE_KEY : str = "change-me-use-secrets-token-hex-32"
+    JWT_ALGORITHM : str = "HS256"
 
     # -------------------------------------------------------
     # Pydantic Settings Configuration

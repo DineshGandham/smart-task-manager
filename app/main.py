@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import get_settings
 from app.core.exceptions import register_exception_handlers
 from app.middleware.logging import RequestLoggingMiddleware
-from app.routers import tasks, notes, ai
+from app.routers import tasks, notes, ai, auth
 
 settings = get_settings()
 
@@ -48,6 +48,7 @@ app.add_middleware(RequestLoggingMiddleware)
 register_exception_handlers(app)
 
 # ── Routers ────────────────────────────────────────────────────────────────────
+app.include_router(auth.router, prefix="/api/v1")
 app.include_router(tasks.router, prefix="/api/v1")
 app.include_router(notes.router, prefix="/api/v1")
 app.include_router(ai.router,    prefix="/api/v1")
