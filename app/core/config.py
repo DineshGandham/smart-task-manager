@@ -23,9 +23,15 @@ class Settings(BaseSettings):
     APP_NAME : str = "Smart Task Manager"
     APP_VERSION : str = "0.1.0"
     DATA_FILE_PATH : str = "data/db.json"
+
+    DATABASE_URL: str = "postgresql://postgres:admin@localhost:5432/smarttaskdb"
+    
     CORS_ORIGINS : list[str] = ["*"]
     GEMINI_API_KEY : str = ""
     OPENAI_API_KEY : str = ""
+    ACCESS_TOKEN_EXPIRE_HOURS : int = 24
+    SECRETE_KEY : str = "change-me-use-secrets-token-hex-32"
+    JWT_ALGORITHM : str = "HS256"
 
     # -------------------------------------------------------
     # Pydantic Settings Configuration

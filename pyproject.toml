@@ -1,15 +1,29 @@
 [project]
 name = "smart-task-manager"
-version = "0.1.0"
+version = "0.3.0"
 description = "AI-powered personal task & notes manager"
+readme = "README.md"
 requires-python = ">=3.11"
+
 dependencies = [
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.30.0",
     "pydantic>=2.7.0",
     "pydantic-settings>=2.3.0",
+    "pydantic[email]>=2.7.0",
     "python-dotenv>=1.0.0",
-    "openai>=1.30.0",
+
+    # Phase 2
+    "sqlalchemy>=2.0.0",
+    "psycopg2-binary>=2.9.0",
+    "alembic>=1.13.0",
+
+    # Phase 3 — Auth
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "python-multipart>=0.0.9",
+
+    # AI
     "google-genai>=0.8.0",
 ]
 
@@ -27,3 +41,6 @@ build-backend = "hatchling.build"
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
